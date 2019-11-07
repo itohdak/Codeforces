@@ -21,7 +21,36 @@ const int inf = 1e9+7;
 const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
+void solve() {
+  int N;
+  ll K;
+  cin >> N >> K;
+  string S;
+  cin >> S;
+  int cnt = 0;
+  rep(i, N) {
+    if(S[i] == '0') {
+      if(K >= i-cnt) {
+        char tmp = S[cnt];
+        S[cnt] = '0';
+        S[i] = tmp;
+        K -= i-cnt;
+        cnt++;
+      } else {
+        char tmp = S[i-K];
+        S[i-K] = '0';
+        S[i] = tmp;
+        break;
+      }
+    }
+  }
+  cout << S << endl;
+}
+
 int main() {
+  int Q;
+  cin >> Q;
+  rep(q, Q) solve();
   return 0;
 }
 

@@ -21,7 +21,42 @@ const int inf = 1e9+7;
 const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
+set<int> se;
+vector<set<int> > G;
+void dfs(int v) {
+  se.erase(v);
+  int tmp = 0;
+  while(!se.empty()) {
+    auto itr = se.upper_bound(tmp);
+    if(itr == se.end()) break;
+    tmp = *itr;
+    if(!G[v].count(tmp)) {
+      se.erase(tmp);
+      dfs(tmp);
+    }
+  }
+}
+
 int main() {
+  int N, M;
+  cin >> N >> M;
+  rep(i, N) se.insert(i);
+  G = vector<set<int> >(N);
+  rep(i, M) {
+    int a, b;
+    cin >> a >> b;
+    a--, b--;
+    G[a].insert(b);
+    G[b].insert(a);
+  }
+  int comp = 0;
+  rep(i, N) {
+    if(se.count(i)) {
+      comp++;
+      dfs(i);
+    }
+  }
+  cout << comp-1 << endl;
   return 0;
 }
 

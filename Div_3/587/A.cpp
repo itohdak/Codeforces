@@ -22,6 +22,19 @@ const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
 int main() {
+  int N;
+  cin >> N;
+  string S;
+  cin >> S;
+  int cnt = 0;
+  rep(i, N) {
+    if(i % 2 == 1 && S[i] == S[i-1]) {
+      cnt++;
+      S[i] = S[i-1] == 'a' ? 'b' : 'a';
+    }
+  }
+  cout << cnt << endl;
+  cout << S << endl;
   return 0;
 }
 

@@ -8,20 +8,36 @@ using namespace std;
 #define REPL(i,m,n) for(ll i=(ll)(m); i<(ll)(n); i++)
 #define repl(i,n) REPL(i,0,n)
 #define all(v) v.begin(), v.end()
-template<class t, class u>
-ostream& operator<<(ostream& os, const pair<t, u>& p) {
-  return os << "{" << p.first << ", " << p.second << "}";
-}
-template<class t> ostream& operator<<(ostream& os, const vector<t>& v) {
-  os << "{";
-  rep(i, v.size()) { if(i) os << ", "; os << v[i]; }
-  return os << "}";
-}
 const int inf = 1e9+7;
 const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
+void solve() {
+  int N;
+  cin >> N;
+  ll peven=0, podd=0;
+  rep(i, N) {
+    ll p;
+    cin >> p;
+    if(p % 2 == 0) peven++;
+    else podd++;
+  }
+  int M;
+  cin >> M;
+  vector<ll> Q(M);
+  ll qeven=0, qodd=0;
+  rep(i, M) {
+    ll q;
+    cin >> q;
+    if(q % 2 == 0) qeven++;
+    else qodd++;
+  }
+  cout << peven * qeven + podd * qodd << endl;
+}
 int main() {
+  int T;
+  cin >> T;
+  rep(t, T) solve();
   return 0;
 }
 

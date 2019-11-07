@@ -21,7 +21,36 @@ const int inf = 1e9+7;
 const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
+vector<ll> divisor;
+void find_divisor(ll N) {
+  for(int i=1; i<=sqrt(N); i++) {
+    if(N % i == 0)
+      divisor.push_back(i);
+  }
+  int n = divisor.size();
+  for(int i=n-1; i>=0; i--) {
+    if(N != (ll)pow(divisor[i], 2))
+      divisor.push_back(N / divisor[i]);
+  }
+}
+
+ll gcd(ll x, ll y) {
+  if(x > y)
+    return gcd(y, x);
+  else if(x == 0)
+    return y;
+  else
+    return gcd(y % x, x);
+}
+
 int main() {
+  ll N;
+  cin >> N;
+  find_divisor(N);
+  ll ans = divisor[divisor.size()-1];
+  REP(i, 1, divisor.size())
+    ans = gcd(ans, divisor[i]);
+  cout << ans << endl;
   return 0;
 }
 

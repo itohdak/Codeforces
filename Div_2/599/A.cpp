@@ -21,7 +21,24 @@ const int inf = 1e9+7;
 const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
+void solve() {
+  int N;
+  cin >> N;
+  vector<int> A(N);
+  rep(i, N) cin >> A[i];
+  sort(all(A), greater<int>());
+  int tmp = 0;
+  while(tmp < N) {
+    if(A[tmp] < tmp+1) break;
+    tmp++;
+  }
+  cout << tmp << endl;
+}
+
 int main() {
+  int K;
+  cin >> K;
+  rep(k, K) solve();
   return 0;
 }
 

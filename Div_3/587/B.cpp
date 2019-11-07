@@ -22,6 +22,18 @@ const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
 int main() {
+  int N;
+  cin >> N;
+  vector<pair<int, int> > A(N);
+  rep(i, N) {
+    cin >> A[i].first;
+    A[i].second = i+1;
+  }
+  sort(all(A), greater<pair<int, int> >());
+  ll ans = 0;
+  rep(i, N) ans += A[i].first * i + 1;
+  cout << ans << endl;
+  rep(i, N) cout << A[i].second << ' '; cout << endl;
   return 0;
 }
 

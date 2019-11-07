@@ -21,7 +21,17 @@ const int inf = 1e9+7;
 const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
+void solve() {
+  ll a, b, n, S;
+  cin >> a >> b >> n >> S;
+  if(S - n*min(a, S/n) <= b) cout << "YES" << endl;
+  else cout << "NO" << endl;
+}
+
 int main() {
+  int Q;
+  cin >> Q;
+  rep(q, Q) solve();
   return 0;
 }
 

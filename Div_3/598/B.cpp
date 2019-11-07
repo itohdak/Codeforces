@@ -21,7 +21,45 @@ const int inf = 1e9+7;
 const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
+void solve() {
+  int N;
+  cin >> N;
+  vector<int> A(N);
+  map<int, int> mp;
+  rep(i, N) {
+    cin >> A[i];
+    mp[A[i]] = i;
+  }
+  int tmp = 0;
+  while(!mp.empty()) {
+    int j = mp.begin()->first;
+    int idx = mp.begin()->second;
+    cout << j << ' ';
+    mp.erase(j);
+    if(idx == tmp) {
+      tmp = idx+1;
+    } else {
+      REP(i, tmp, idx) {
+        if(i == idx-1) {
+          mp[A[i]] = idx;
+          A[idx] = A[i];
+        } else {
+          cout << A[i] << ' ';
+          mp.erase(A[i]);
+        }
+      }
+      tmp = idx;
+    }
+    // cout << endl;
+    // if(tmp == N) break;
+  }
+  cout << endl;
+}
+
 int main() {
+  int Q;
+  cin >> Q;
+  rep(q, Q) solve();
   return 0;
 }
 

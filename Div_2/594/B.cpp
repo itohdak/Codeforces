@@ -8,20 +8,24 @@ using namespace std;
 #define REPL(i,m,n) for(ll i=(ll)(m); i<(ll)(n); i++)
 #define repl(i,n) REPL(i,0,n)
 #define all(v) v.begin(), v.end()
-template<class t, class u>
-ostream& operator<<(ostream& os, const pair<t, u>& p) {
-  return os << "{" << p.first << ", " << p.second << "}";
-}
-template<class t> ostream& operator<<(ostream& os, const vector<t>& v) {
-  os << "{";
-  rep(i, v.size()) { if(i) os << ", "; os << v[i]; }
-  return os << "}";
-}
 const int inf = 1e9+7;
 const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
 int main() {
+  int N;
+  cin >> N;
+  vector<ll> A(N);
+  rep(i, N) cin >> A[i];
+  sort(all(A));
+  ll l1 = pow(accumulate(A.begin(), A.begin()+N/2, 0LL), 2);
+  ll l2 = pow(accumulate(A.begin()+N/2, A.end(), 0LL), 2);
+  ll l3 = pow(accumulate(A.begin(), A.begin()+N/2+1, 0LL), 2);
+  ll l4 = pow(accumulate(A.begin()+N/2+1, A.end(), 0LL), 2);
+  if(N % 2 == 0)
+    cout << l1 + l2 << endl;
+  else
+    cout << max(l1 + l2, l3 + l4) << endl;
   return 0;
 }
 

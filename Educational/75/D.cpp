@@ -10,49 +10,67 @@ const int inf = 1e9+7;
 const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
+vector<ll> L, R;
+ll S;
+bool test(int N, ll s) {
+  vector<int> cnt(3);
+  ll sum = 0;
+  multiset<ll> cand;
+  rep(i, N) {
+    sum += L[i];
+    if(R[i] < s) cnt[0]++;
+    else if(s < L[i]) cnt[2]++;
+    else {
+      cnt[1]++;
+      cand.insert(s - L[i]);
+    }
+  }
+  if(sum > S)
+    return false;
+  if(cnt[0] >= (N+1)/2)
+    return false;
+  else if(cnt[2] >= (N+1)/2)
+    return true;
+  else {
+    int rem = (N+1)/2 - cnt[2];
+    ll remS = S - sum;
+    ll candSum = 0;
+    rep(i, rem) {
+      auto top = cand.begin();
+      candSum += *top;
+      cand.erase(top);
+    }
+    if(remS >= candSum) return true;
+    else return false;
+  }
+}
+
+ll binary_search(int N, ll s) {
+  ll l = 0, r = s+1;
+  while(r - l > 1) {
+    ll mid = (l + r) / 2;
+    if(test(N, mid))
+      l = mid;
+    else
+      r = mid;
+  }
+  return l;
+}
+
 int main() {
   int T;
   cin >> T;
   rep(t, T) {
     int N;
-    ll S;
     cin >> N >> S;
-    vector<pair<ll, pair<int, int> > > A;
-    vector<pair<ll, ll> > B;
+    L = vector<ll>(N);
+    R = vector<ll>(N);
+    ll maxR = 0;
     rep(i, N) {
-      ll l, r;
-      cin >> l >> r;
-      A.push_back(make_pair(l, make_pair(-1, i)));
-      A.push_back(make_pair(r+1, make_pair(1, i)));
-      B[i].first = l; B[i].second = r;
-      S -= l;
+      cin >> L[i] >> R[i];
+      maxR = max(maxR, R[i]);
     }
-    sort(all(A));
-    set<int> emp;
-    int cnt = 0;
-    int cntl = 0;
-    int tmp = 0;
-    ll tmpPrice;
-    while(true) {
-      tmpPrice = A[tmp].first;
-      while(A[tmp].first == tmpPrice) {
-        if(A[tmp].second.first == -1) {
-          emp.insert(A[tmp].second.second);
-          cnt++;
-        } else {
-          emp.erase(A[tmp].second.second);
-          cntl++;
-        }
-        tmp++;
-      }
-      if(cnt >= (N+1)/2) break;
-    }
-    // for(auto e: emp) cout << e << ' ';
-    // cout << endl;
-    // cout << tmpPrice << endl;
-
-    // ll minPrice = 1e+10;
-    // for(auto e: emp) minPrice = min(minPrice, B[e].second);
+    cout << binary_search(N, maxR) << endl;
   }
   return 0;
 }
