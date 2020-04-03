@@ -34,7 +34,11 @@ const int inf = 1e9+7;
 const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
+void solve() {
+}
 int main() {
+  int T;
+  cin >> T;
+  rep(t, T) solve();
   return 0;
 }
-
