@@ -18,6 +18,6 @@ int main() {
   ios::sync_with_stdio(false);
   int T;
   cin >> T;
-  rep(t, T) solve();
+  while(T--) solve();
   return 0;
 }
