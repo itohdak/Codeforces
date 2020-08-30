@@ -12,19 +12,26 @@ const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
 void solve() {
-  map<char, char> mp = {{'R', 'P'}, {'P', 'S'}, {'S', 'R'}};
-  string s; cin >> s;
-  map<char, int> cnt;
-  for(char c: s) cnt[c]++;
-  int mx = -1;
-  char mxc;
-  for(auto ele: cnt) {
-    if(ele.second > mx) {
-      mx = ele.second;
-      mxc = ele.first;
-    }
+  int n, k, z; cin >> n >> k >> z;
+  vector<ll> A(n), sum(n+1), mx2(n);
+  rep(i, n) {
+    cin >> A[i];
+    sum[i+1] = sum[i] + A[i];
+    if(i) mx2[i] = max(A[i]+A[i-1], mx2[i-1]);
   }
-  cout << string(s.size(), mp[mxc]) << "\n";
+  ll mx = 0;
+  for(int i=max(k-2*z, 1); i<=k; i++) {
+    // cout << i << ' ';
+    ll tmp = 0;
+    tmp += sum[i+1];
+    // cout << tmp << ' ' << mx2[i] << ' ' << (k-i)/2 << ' ';
+    tmp += mx2[i] * (ll)((k-i)/2);
+    // cout << tmp << ' ';
+    if((k-i)%2) tmp += A[i-1];
+    // cout << tmp << endl;
+    mx = max(tmp, mx);
+  }
+  cout << mx << "\n";
 }
 int main() {
   cin.tie(0);

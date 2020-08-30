@@ -12,6 +12,19 @@ const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
 void solve() {
+  map<char, char> mp = {{'R', 'P'}, {'P', 'S'}, {'S', 'R'}};
+  string s; cin >> s;
+  map<char, int> cnt;
+  for(char c: s) cnt[c]++;
+  int mx = -1;
+  char mxc;
+  for(auto ele: cnt) {
+    if(ele.second > mx) {
+      mx = ele.second;
+      mxc = ele.first;
+    }
+  }
+  cout << string(s.size(), mp[mxc]) << "\n";
 }
 int main() {
   cin.tie(0);

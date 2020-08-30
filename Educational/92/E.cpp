@@ -12,6 +12,12 @@ const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
 void solve() {
+  ll m, d, w; cin >> m >> d >> w;
+  ll n = min(d, w);
+  if((d-1)%w==0) cout << n*(n-1)/2 << "\n";
+  else { // (y-x)%w==0
+    
+  }
 }
 int main() {
   cin.tie(0);

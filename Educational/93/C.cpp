@@ -2,44 +2,32 @@
 #include "/home/itohdak/Codeforces/000/print.hpp"
 using namespace std;
 #define ll long long
+#define ld long double
 #define REP(i,m,n) for(int i=(int)(m); i<(int)(n); i++)
 #define rep(i,n) REP(i,0,n)
 #define RREP(i,m,n) for(int i=(int)(m); i>=(int)(n); i--)
 #define rrep(i,n) RREP(i,n-1,0)
 #define all(v) v.begin(), v.end()
+#define endk '\n'
 const int inf = 1e9+7;
 const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
+const ld eps = 1e-10;
 
 void solve() {
+  int n; cin >> n;
   string s; cin >> s;
-  int n = s.size();
-  map<char, vector<int>> mp;
-  rep(i, n) mp[s[i]].push_back(i);
-  int mx = 0;
-  rep(i, 10) rep(j, 10) {
-    char s1 = char('0'+i);
-    char s2 = char('0'+j);
-    int k = 0;
-    int cnt = 0;
-    int flag = 0;
-    while(1) {
-      vector<int>::iterator itr;
-      if(flag==0) {
-        itr = lower_bound(all(mp[s1]), k);
-        if(itr == mp[s1].end()) break;
-      } else {
-        itr = lower_bound(all(mp[s2]), k);
-        if(itr == mp[s2].end()) break;
-      }
-      cnt++;
-      flag = 1-flag;
-      k = *itr+1;
-    }
-    if(i==j) mx = max(cnt, mx);
-    else mx = max(cnt/2*2, mx);
+  vector<ll> sum(n+1);
+  rep(i, n) sum[i+1] = sum[i] + (s[i]-'0');
+  rep(i, n+1) sum[i] -= i;
+  map<ll, ll> cnt;
+  rep(i, n+1) cnt[sum[i]]++;
+  ll ans = 0;
+  for(auto ele: cnt) {
+    ll m = ele.second;
+    ans += m * (m-1) / 2;
   }
-  cout << n-mx << "\n";
+  cout << ans << endk;
 }
 int main() {
   cin.tie(0);

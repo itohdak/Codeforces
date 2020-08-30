@@ -12,23 +12,34 @@ const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 
 void solve() {
-  int n; ll x; cin >> n >> x;
-  priority_queue<ll> q;
-  rep(i, n) {
-    ll a; cin >> a;
-    q.push(a);
-  }
-  int ans = 0;
-  int m = 0;
-  while(!q.empty()) {
-    ll cur = q.top(); q.pop();
-    m++;
-    if(cur * m >= x) {
-      ans++;
-      m = 0;
+  string s; cin >> s;
+  int n = s.size();
+  map<char, vector<int>> mp;
+  rep(i, n) mp[s[i]].push_back(i);
+  int mx = 0;
+  rep(i, 10) rep(j, 10) {
+    char s1 = char('0'+i);
+    char s2 = char('0'+j);
+    int k = 0;
+    int cnt = 0;
+    int flag = 0;
+    while(1) {
+      vector<int>::iterator itr;
+      if(flag==0) {
+        itr = lower_bound(all(mp[s1]), k);
+        if(itr == mp[s1].end()) break;
+      } else {
+        itr = lower_bound(all(mp[s2]), k);
+        if(itr == mp[s2].end()) break;
+      }
+      cnt++;
+      flag = 1-flag;
+      k = *itr+1;
     }
+    if(i==j) mx = max(cnt, mx);
+    else mx = max(cnt/2*2, mx);
   }
-  cout << ans << "\n";
+  cout << n-mx << "\n";
 }
 int main() {
   cin.tie(0);

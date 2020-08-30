@@ -15,29 +15,34 @@ const ll mod = 1e9+7;
 const ld eps = 1e-10;
 
 void solve() {
-  string s; cin >> s;
-  vector<int> cnt;
-  int l = 0, r = 0;
-  int n = s.size();
-  while(l < n) {
-    while(l < n && s[l]=='0') l++;
-    r = l;
-    while(r < n && s[r]=='1') r++;
-    cnt.push_back(r-l);
-    l = r;
+  int n, m; cin >> n >> m;
+  vector<string> in(n);
+  vector<vector<int>> S(n, vector<int>(m));
+  rep(i, n) {
+    cin >> in[i];
+    rep(j, m) S[i][j] = in[i][j]-'0';
   }
-  sort(all(cnt), greater<ll>());
-  int ans = 0;
-  rep(i, cnt.size()) {
-    if(i%2==0) ans += cnt[i];
+  if(n >= 4 && m >= 4) {
+    cout << -1 << endk;
+    return;
   }
-  cout << ans << endk;
+  if(n == 1 || m == 1) {
+    cout << 0 << endk;
+    return;
+  }
+  if(n >= 4) { // transpose
+    vector<vector<int>> tmp(m, vector<int>(n));
+    rep(i, n) rep(j, m) tmp[j][i] = S[i][j];
+    swap(n, m);
+    S = vector<vector<int>>(n, vector<int>(m));
+    rep(i, n) rep(j, m) S[i][j] = tmp[i][j];
+    assert(n < 4);
+  }
 }
 int main() {
   cin.tie(0);
   ios::sync_with_stdio(false);
-  int T;
-  cin >> T;
+  int T = 1;
   while(T--) solve();
   return 0;
 }

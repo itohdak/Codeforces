@@ -6,32 +6,32 @@ using namespace std;
 #define REP(i,m,n) for(int i=(int)(m); i<(int)(n); i++)
 #define rep(i,n) REP(i,0,n)
 #define RREP(i,m,n) for(int i=(int)(m); i>=(int)(n); i--)
-#define rrep(i,n) RREP(i,n-1,0)
+#define rrep(i,n) RREP(i,(n)-1,0)
 #define all(v) v.begin(), v.end()
 #define endk '\n'
 const int inf = 1e9+7;
 const ll longinf = 1LL<<60;
 const ll mod = 1e9+7;
 const ld eps = 1e-10;
+template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
+template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
   string s; cin >> s;
-  vector<int> cnt;
-  int l = 0, r = 0;
+  int x; cin >> x;
   int n = s.size();
-  while(l < n) {
-    while(l < n && s[l]=='0') l++;
-    r = l;
-    while(r < n && s[r]=='1') r++;
-    cnt.push_back(r-l);
-    l = r;
+  string w(n, '0');
+  rep(i, n) {
+    if((i-x<0 || s[i-x]=='1') && (i+x>=n || s[i+x]=='1')) w[i] = '1';
+    else w[i] = '0';
   }
-  sort(all(cnt), greater<ll>());
-  int ans = 0;
-  rep(i, cnt.size()) {
-    if(i%2==0) ans += cnt[i];
+  string ss(n, '0');
+  rep(i, n) {
+    if((i-x<0 || w[i-x]=='0') && (i+x>=n || w[i+x]=='0')) ss[i] = '0';
+    else ss[i] = '1';
   }
-  cout << ans << endk;
+  if(ss != s) cout << -1 << endk;
+  else cout << w << endk;
 }
 int main() {
   cin.tie(0);
