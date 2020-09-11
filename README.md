@@ -8,7 +8,12 @@
 ```
 $ git clone https://github.com/itohdak/Codeforces.git
 $ cd Codeforces
-$ source setup.sh # this will overwrite ~/.bashrc to define function "mkdir_codeforces"
+
+# define function "mkdir_codeforces" in .bashrc
+# add Codeforces/include to $CPATH in .bashrc
+$ source setup.sh
+$ exec bash
+
 $ mkdir_codeforces [folder_name]
 # you can see a new folder named [folder_name] which includes sample cpp files
 ```

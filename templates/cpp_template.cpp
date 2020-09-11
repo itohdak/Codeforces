@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#include "/home/itohdak/Codeforces/templates/print.hpp"
+#include <print.hpp>
 using namespace std;
 #define ll long long
 #define ld long double
