@@ -17,29 +17,34 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n, k; cin >> n >> k;
-  vector<ll> A(n);
-  map<ll, int> mp;
-  rep(i, n) {
-    cin >> A[i];
-    mp[A[i]] = i;
-  }
-  if((int)mp.size() < k) {
-    cout << "NO" << endk;
-  } else {
-    cout << "YES" << endk;
-    auto itr = mp.begin();
-    rep(i, k) {
-      cout << itr->second+1 << ' ';
-      itr++;
+  ll n; cin >> n;
+  vector<ll> A(3), B(3);
+  vector<ll> Aorig(3), Borig(3);
+  rep(i, 3) cin >> Aorig[i];
+  rep(i, 3) cin >> Borig[i];
+  ll mx = 0;
+  rep(i, 3) mx += min(Aorig[i], Borig[(i+1)%3]);
+  ll mn = longinf;
+  rep(j, 3) {
+    ll cur = 0;
+    copy(all(Aorig), begin(A));
+    copy(all(Borig), begin(B));
+    rrep(i, 3) {
+      ll tmp = min(A[(i+j)%3], B[(i+j)%3]);
+      A[(i+j)%3] -= tmp; B[(i+j)%3] -= tmp;
+      tmp = min(A[(i+j)%3], B[(i+j+2)%3]);
+      A[(i+j)%3] -= tmp; B[(i+j+2)%3] -= tmp;
+      cur += A[(i+j)%3];
     }
-    cout << endk;
+    chmin(mn, cur);
   }
+  cout << mn << ' ' << mx << endk;
 }
 int main() {
   cin.tie(0);
   ios::sync_with_stdio(false);
   int T = 1;
+  // cin >> T;
   while(T--) solve();
   return 0;
 }

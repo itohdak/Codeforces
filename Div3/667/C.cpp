@@ -16,30 +16,33 @@ const ld eps = 1e-10;
 template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
-void solve() {
-  int n, k; cin >> n >> k;
-  vector<ll> A(n);
-  map<ll, int> mp;
-  rep(i, n) {
-    cin >> A[i];
-    mp[A[i]] = i;
+void find_divisor(ll N, vector<ll>& divisor) {
+  for(int i=1; i<=sqrt(N); i++) {
+    if(N % i == 0)
+      divisor.push_back(i);
   }
-  if((int)mp.size() < k) {
-    cout << "NO" << endk;
-  } else {
-    cout << "YES" << endk;
-    auto itr = mp.begin();
-    rep(i, k) {
-      cout << itr->second+1 << ' ';
-      itr++;
-    }
-    cout << endk;
+  int n = divisor.size();
+  for(int i=n-1; i>=0; i--) {
+    if(N != (ll)pow(divisor[i], 2))
+      divisor.push_back(N / divisor[i]);
+  }
+}
+void solve() {
+  int n, x, y; cin >> n >> x >> y;
+  vector<ll> div;
+  find_divisor(abs(x-y), div);
+  for(ll d: div) {
+    if(abs(x-y)/d+1 > n) continue;
+    ll mn = max(y-(n-1)*d, x-(x-1)/d*d);
+    rep(i, n) cout << mn + d*i << ' '; cout << endk;
+    break;
   }
 }
 int main() {
   cin.tie(0);
   ios::sync_with_stdio(false);
-  int T = 1;
+  int T;
+  cin >> T;
   while(T--) solve();
   return 0;
 }

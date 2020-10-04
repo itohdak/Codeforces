@@ -17,24 +17,26 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n, k; cin >> n >> k;
-  vector<ll> A(n);
-  map<ll, int> mp;
+  int n; cin >> n;
+  vector<ll> M(n); rep(i, n) cin >> M[i];
+  vector<ll> inc(n+1), dec(n+1);
+  rep(i, n) inc[i+1] = inc[i] + min(M[i], (i==n-1 ? longinf : M[i+1]));
+  rrep(i, n) dec[i] = dec[i+1] + min(M[i], (i==0 ? longinf : M[i-1]));
+  // cout << inc << endk << dec << endk;
+  ll mx = 0;
+  int mxi = 0;
   rep(i, n) {
-    cin >> A[i];
-    mp[A[i]] = i;
-  }
-  if((int)mp.size() < k) {
-    cout << "NO" << endk;
-  } else {
-    cout << "YES" << endk;
-    auto itr = mp.begin();
-    rep(i, k) {
-      cout << itr->second+1 << ' ';
-      itr++;
+    if(mx < inc[i]+M[i]+dec[i+1]) {
+      mx = inc[i]+M[i]+dec[i+1];
+      mxi = i;
     }
-    cout << endk;
   }
+  rep(i, n) {
+    if(i < mxi) cout << min(M[i], (i==n-1 ? longinf : M[i+1])) << ' ';
+    else if(i == mxi) cout << M[i] << ' ';
+    else cout << min(M[i], (i==0 ? longinf : M[i-1])) << ' ';
+  }
+  cout << endk;
 }
 int main() {
   cin.tie(0);

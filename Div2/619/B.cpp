@@ -17,29 +17,37 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n, k; cin >> n >> k;
-  vector<ll> A(n);
-  map<ll, int> mp;
-  rep(i, n) {
-    cin >> A[i];
-    mp[A[i]] = i;
-  }
-  if((int)mp.size() < k) {
-    cout << "NO" << endk;
-  } else {
-    cout << "YES" << endk;
-    auto itr = mp.begin();
-    rep(i, k) {
-      cout << itr->second+1 << ' ';
-      itr++;
+  int n; cin >> n;
+  vector<ll> A(n); rep(i, n) cin >> A[i];
+  ll ans = 0;
+  ll val = 0;
+  vector<ll> B;
+  rep(i, n-1) {
+    if(A[i] == -1 && A[i+1] == -1) {
+      continue;
+    } else if(A[i] != -1 && A[i+1] != -1) {
+      if(ans < abs(A[i]-A[i+1])) {
+        chmax(ans, abs(A[i]-A[i+1]));
+      }
+    } else if(A[i] == -1) {
+      B.push_back(A[i+1]);
+    } else if(A[i+1] == -1) {
+      B.push_back(A[i]);
     }
-    cout << endk;
   }
+  sort(all(B));
+  if(!B.empty()) {
+    ll mn = *B.begin(), mx = *B.rbegin();
+    chmax(ans, (mx-mn+1)/2);
+    val = mn + abs(mx-mn) / 2;
+  }
+  cout << ans << ' ' << val << endk;
 }
 int main() {
   cin.tie(0);
   ios::sync_with_stdio(false);
-  int T = 1;
+  int T;
+  cin >> T;
   while(T--) solve();
   return 0;
 }

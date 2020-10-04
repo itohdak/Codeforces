@@ -17,24 +17,40 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n, k; cin >> n >> k;
-  vector<ll> A(n);
-  map<ll, int> mp;
-  rep(i, n) {
-    cin >> A[i];
-    mp[A[i]] = i;
-  }
-  if((int)mp.size() < k) {
-    cout << "NO" << endk;
-  } else {
-    cout << "YES" << endk;
-    auto itr = mp.begin();
-    rep(i, k) {
-      cout << itr->second+1 << ' ';
-      itr++;
+  ll n; cin >> n;
+  vector<int> d;
+  {
+    ll m = n;
+    while(m) {
+      d.push_back(m%10);
+      m /= 10;
     }
-    cout << endk;
   }
+  int nd = d.size();
+  map<int, vector<int>> mp;
+  rep(i, nd) mp[d[i]].push_back(i);
+  int mn = inf;
+  if(mp.count(0) && mp[0].size() >= 2) {
+    int f = mp[0][0];
+    int s = mp[0][1];
+    chmin(mn, f+s-1);
+  }
+  int a[] = {2, 5, 7};
+  int b[] = {5, 0, 5};
+  rep(i, 3) {
+    if(mp.count(a[i]) && mp.count(b[i])) {
+      int f = mp[a[i]][0];
+      int s = mp[b[i]][0];
+      int cnt = 0;
+      rrep(j, nd) {
+        if(j == f || j == s) continue;
+        if(d[j] != 0) break;
+        cnt++;
+      }
+      chmin(mn, f+s-1+(f<s)+cnt);
+    }
+  }
+  cout << (mn == inf ? -1 : mn) << endk;
 }
 int main() {
   cin.tie(0);

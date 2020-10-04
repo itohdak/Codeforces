@@ -17,29 +17,38 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n, k; cin >> n >> k;
-  vector<ll> A(n);
-  map<ll, int> mp;
+  int n; cin >> n;
+  vector<int> A(n); rep(i, n) cin >> A[i];
+  vector<vector<int>> pos(n);
+  rep(i, n) pos[i].push_back(-1);
+  rep(i, n) pos[A[i]-1].push_back(i);
+  rep(i, n) pos[i].push_back(n);
+  vector<int> maxdist(n);
   rep(i, n) {
-    cin >> A[i];
-    mp[A[i]] = i;
-  }
-  if((int)mp.size() < k) {
-    cout << "NO" << endk;
-  } else {
-    cout << "YES" << endk;
-    auto itr = mp.begin();
-    rep(i, k) {
-      cout << itr->second+1 << ' ';
-      itr++;
+    int prev = pos[i][0];
+    rep(j, pos[i].size()) {
+      chmax(maxdist[i], pos[i][j] - prev);
+      prev = pos[i][j];
     }
-    cout << endk;
   }
+  // cout << maxdist << endl;
+  vector<vector<int>> B(n+1);
+  rep(i, n) if(maxdist[i] != n+1) B[maxdist[i]].push_back(i);
+  set<int> st;
+  rep(i, n+1) {
+    if(i) {
+      for(int j: B[i]) st.insert(j);
+      if(st.empty()) cout << -1 << ' ';
+      else cout << *st.begin()+1 << ' ';
+    }
+  }
+  cout << endk;
 }
 int main() {
   cin.tie(0);
   ios::sync_with_stdio(false);
-  int T = 1;
+  int T;
+  cin >> T;
   while(T--) solve();
   return 0;
 }

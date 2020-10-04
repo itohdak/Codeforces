@@ -17,24 +17,36 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n, k; cin >> n >> k;
-  vector<ll> A(n);
-  map<ll, int> mp;
+  int n; cin >> n;
+  vector<ll> A(n); rep(i, n) cin >> A[i];
+  vector<ll> sum(n+1);
+  rep(i, n) sum[i+1] = sum[i] + A[i];
+  deque<pair<ll, int>> q;
   rep(i, n) {
-    cin >> A[i];
-    mp[A[i]] = i;
-  }
-  if((int)mp.size() < k) {
-    cout << "NO" << endk;
-  } else {
-    cout << "YES" << endk;
-    auto itr = mp.begin();
-    rep(i, k) {
-      cout << itr->second+1 << ' ';
-      itr++;
+    q.push_back({A[i], 1});
+    while(q.size() >= 2) {
+      auto p1 = *q.rbegin();
+      auto p2 = *(++q.rbegin());
+      if(p1.first * p2.second <= p2.first * p1.second) {
+        q.pop_back(); q.pop_back();
+        q.push_back({p1.first+p2.first, p1.second+p2.second});
+      } else {
+        break;
+      }
     }
-    cout << endk;
   }
+  vector<ld> ans(n);
+  {
+    int i = 0;
+    while(!q.empty()) {
+      ll sum = q.front().first;
+      int cnt = q.front().second;
+      q.pop_front();
+      rep(j, cnt) ans[i++] = (ld)sum / cnt;
+    }
+  }
+  cout << fixed << setprecision(15);
+  rep(i, n) cout << ans[i] << endk;
 }
 int main() {
   cin.tie(0);

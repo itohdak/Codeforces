@@ -17,24 +17,15 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n, k; cin >> n >> k;
-  vector<ll> A(n);
-  map<ll, int> mp;
+  int n, w; cin >> n >> w;
+  vector<ll> A(n); rep(i, n) cin >> A[i];
+  ll mx = 0, mn = 0, cur = 0;
   rep(i, n) {
-    cin >> A[i];
-    mp[A[i]] = i;
+    cur += A[i];
+    chmax(mx, cur);
+    chmin(mn, cur);
   }
-  if((int)mp.size() < k) {
-    cout << "NO" << endk;
-  } else {
-    cout << "YES" << endk;
-    auto itr = mp.begin();
-    rep(i, k) {
-      cout << itr->second+1 << ' ';
-      itr++;
-    }
-    cout << endk;
-  }
+  cout << max(0LL, w-(mx-mn)+1) << endk;
 }
 int main() {
   cin.tie(0);

@@ -17,24 +17,33 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n, k; cin >> n >> k;
-  vector<ll> A(n);
-  map<ll, int> mp;
-  rep(i, n) {
-    cin >> A[i];
-    mp[A[i]] = i;
-  }
-  if((int)mp.size() < k) {
-    cout << "NO" << endk;
-  } else {
-    cout << "YES" << endk;
-    auto itr = mp.begin();
-    rep(i, k) {
-      cout << itr->second+1 << ' ';
-      itr++;
+  int n; cin >> n;
+  vector<ll> A(n); rep(i, n) cin >> A[i];
+  sort(all(A));
+  ll ans = longinf;
+  int cnt = 0;
+  auto dfs = [&](auto dfs, int b, int l, int r, ll val) -> void {
+    // cout << l << ' ' << r << endk;
+    if(b == -1) {
+      chmin(ans, val);
+      return;
     }
-    cout << endk;
-  }
+    int nr = l;
+    for(int i=l; i<r; i++) {
+      if(!((A[i]>>b)&1)) nr = i+1;
+      cnt++;
+    }
+    if(nr != l && nr != r) {
+      val += (1LL<<b);
+      dfs(dfs, b-1, l, nr, val);
+      dfs(dfs, b-1, nr, r, val);
+    } else {
+      dfs(dfs, b-1, l, r, val);
+    }
+  };
+  dfs(dfs, 30, 0, n, 0);
+  cout << ans << endk;
+  assert(cnt == 31*n);
 }
 int main() {
   cin.tie(0);

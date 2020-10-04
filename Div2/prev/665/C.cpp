@@ -17,29 +17,30 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n, k; cin >> n >> k;
-  vector<ll> A(n);
-  map<ll, int> mp;
+  int n; cin >> n;
+  vector<ll> A(n); rep(i, n) cin >> A[i];
+  ll mn = *min_element(all(A));
+  vector<ll> B; rep(i, n) if(A[i]%mn==0) B.push_back(A[i]);
+  sort(all(B));
+  vector<ll> C(n);
+  int j = 0;
   rep(i, n) {
-    cin >> A[i];
-    mp[A[i]] = i;
+    if(A[i]%mn==0) C[i] += B[j++];
+    else C[i] = A[i];
   }
-  if((int)mp.size() < k) {
-    cout << "NO" << endk;
-  } else {
-    cout << "YES" << endk;
-    auto itr = mp.begin();
-    rep(i, k) {
-      cout << itr->second+1 << ' ';
-      itr++;
+  rep(i, n-1) {
+    if(C[i+1] < C[i]) {
+      cout << "NO" << endk;
+      return;
     }
-    cout << endk;
   }
+  cout << "YES" << endk;
 }
 int main() {
   cin.tie(0);
   ios::sync_with_stdio(false);
-  int T = 1;
+  int T;
+  cin >> T;
   while(T--) solve();
   return 0;
 }

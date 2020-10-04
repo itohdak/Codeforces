@@ -18,23 +18,41 @@ template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
   int n, k; cin >> n >> k;
-  vector<ll> A(n);
-  map<ll, int> mp;
+  vector<ll> R(n);
+  vector<pair<ll, int>> P(n);
   rep(i, n) {
-    cin >> A[i];
-    mp[A[i]] = i;
+    cin >> R[i];
+    P[i].first = R[i];
+    P[i].second = i;
   }
-  if((int)mp.size() < k) {
-    cout << "NO" << endk;
-  } else {
-    cout << "YES" << endk;
-    auto itr = mp.begin();
-    rep(i, k) {
-      cout << itr->second+1 << ' ';
-      itr++;
+  sort(all(P));
+  map<int, int> mp;
+  rep(i, n) mp[P[i].second] = i;
+  vector<vector<ll>> quarrel(n);
+  rep(i, k) {
+    int x, y; cin >> x >> y;
+    x--; y--;
+    quarrel[x].push_back(y);
+    quarrel[y].push_back(x);
+  }
+  int i = 0;
+  vector<int> ans(n);
+  vector<int> cnt(n);
+  while(i < n) {
+    ll cur = P[i].first;
+    int tmp = i;
+    while(i < n && P[i].first == cur) {
+      for(int j: quarrel[P[i].second]) {
+        if(P[i].first != P[mp[j]].first) cnt[mp[j]]++;
+      }
+      ans[i] = tmp - cnt[i];
+      i++;
     }
-    cout << endk;
   }
+  vector<int> A(n);
+  rep(i, n) A[P[i].second] = ans[i];
+  rep(i, n) cout << A[i] << ' ';
+  cout << endk;
 }
 int main() {
   cin.tie(0);

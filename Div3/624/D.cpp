@@ -17,29 +17,34 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n, k; cin >> n >> k;
-  vector<ll> A(n);
-  map<ll, int> mp;
-  rep(i, n) {
-    cin >> A[i];
-    mp[A[i]] = i;
-  }
-  if((int)mp.size() < k) {
-    cout << "NO" << endk;
-  } else {
-    cout << "YES" << endk;
-    auto itr = mp.begin();
-    rep(i, k) {
-      cout << itr->second+1 << ' ';
-      itr++;
+  int a, b, c; cin >> a >> b >> c;
+  ll ans = longinf;
+  int ansi, ansj;
+  for(ll i=1; i<=10000; i++) {
+    for(ll j=1; j<=10000; j++) {
+      if(i*j >= 100000) break;
+      ll tmp = 0;
+      tmp += abs(a-i);
+      tmp += abs(b-i*j);
+      ll b_ = i*j;
+      tmp += min(abs(c-c/b_*b_), abs(c-(c/b_+1)*b_));
+      if(tmp < ans) {
+        ans = tmp;
+        ansi = i;
+        ansj = j;
+      }
     }
-    cout << endk;
+    // cout << i << endl;
   }
+  ll b_ = 1LL * ansi * ansj;
+  cout << ans << endk;
+  cout << ansi << ' ' << b_ << ' ' << (abs(c-c/b_*b_) < abs(c-(c/b_+1)*b_) ? c/b_*b_ : (c/b_+1)*b_) << endk;
 }
 int main() {
   cin.tie(0);
   ios::sync_with_stdio(false);
-  int T = 1;
+  int T;
+  cin >> T;
   while(T--) solve();
   return 0;
 }

@@ -17,24 +17,38 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n, k; cin >> n >> k;
-  vector<ll> A(n);
-  map<ll, int> mp;
-  rep(i, n) {
-    cin >> A[i];
-    mp[A[i]] = i;
-  }
-  if((int)mp.size() < k) {
-    cout << "NO" << endk;
-  } else {
-    cout << "YES" << endk;
-    auto itr = mp.begin();
-    rep(i, k) {
-      cout << itr->second+1 << ' ';
-      itr++;
+  int n; cin >> n;
+  vector<ll> A(n); rep(i, n) cin >> A[i];
+  vector<ll> sum(n+1); rep(i, n) sum[i+1] = sum[i] + A[i];
+  // solution. 1
+  set<ll> st;
+  st.insert(0);
+  int ans = 0;
+  REP(i, 1, n+1) {
+    if(st.count(sum[i])) {
+      ans++;
+      st.clear();
+      st.insert(sum[i-1]);
     }
-    cout << endk;
+    st.insert(sum[i]);
   }
+  cout << ans << endk;
+  // solution. 2
+  // set<ll> st;
+  // st.insert(0);
+  // int ans = 0;
+  // ll sum = 0;
+  // rep(i, n) {
+  //   sum += A[i];
+  //   if(st.count(sum)) {
+  //     ans++;
+  //     st.clear();
+  //     st.insert(0);
+  //     sum = A[i];
+  //   }
+  //   st.insert(sum);
+  // }
+  // cout << ans << endk;
 }
 int main() {
   cin.tie(0);

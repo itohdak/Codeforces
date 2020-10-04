@@ -17,29 +17,29 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n, k; cin >> n >> k;
-  vector<ll> A(n);
-  map<ll, int> mp;
-  rep(i, n) {
-    cin >> A[i];
-    mp[A[i]] = i;
-  }
-  if((int)mp.size() < k) {
-    cout << "NO" << endk;
-  } else {
-    cout << "YES" << endk;
-    auto itr = mp.begin();
-    rep(i, k) {
-      cout << itr->second+1 << ' ';
-      itr++;
-    }
-    cout << endk;
-  }
+  int n; cin >> n;
+  vector<ll> A(n); rep(i, n) cin >> A[i];
+  vector<int> L(n); rep(i, n) cin >> L[i];
+  vector<int> B;
+  rep(i, n) if(!L[i]) B.push_back(A[i]);
+  sort(all(B));
+  int j = 0;
+  rrep(i, n) if(!L[i]) A[i] = B[j++];
+  rep(i, n) cout << A[i] << ' ';
+  cout << endk;
+  // ll sum = 0;
+  // int ans = 0;
+  // rep(i, n) {
+  //   sum += A[i];
+  //   if(sum < 0) chmax(ans, i+1);
+  // }
+  // cout << ans << endk;
 }
 int main() {
   cin.tie(0);
   ios::sync_with_stdio(false);
-  int T = 1;
+  int T;
+  cin >> T;
   while(T--) solve();
   return 0;
 }

@@ -17,24 +17,23 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n, k; cin >> n >> k;
-  vector<ll> A(n);
-  map<ll, int> mp;
-  rep(i, n) {
-    cin >> A[i];
-    mp[A[i]] = i;
+  int n; cin >> n;
+  vector<pair<ll, ll>> P(n);
+  rep(i, n) cin >> P[i].first >> P[i].second;
+  if(n%2) {
+    cout << "No" << endk;
+    return;
   }
-  if((int)mp.size() < k) {
-    cout << "NO" << endk;
-  } else {
-    cout << "YES" << endk;
-    auto itr = mp.begin();
-    rep(i, k) {
-      cout << itr->second+1 << ' ';
-      itr++;
+  P.push_back(P[0]);
+  rep(i, n/2) {
+    ll dx1 = P[i+1].first-P[i].first, dy1 = P[i+1].second-P[i].second;
+    ll dx2 = P[i+n/2+1].first-P[i+n/2].first, dy2 = P[i+n/2+1].second-P[i+n/2].second;
+    if(dx1 * dy2 != dx2 * dy1 || dx1*dx1+dy1*dy1 != dx2*dx2+dy2*dy2) {
+      cout << "No" << endk;
+      return;
     }
-    cout << endk;
   }
+  cout << "Yes" << endk;
 }
 int main() {
   cin.tie(0);
