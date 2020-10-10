@@ -19,57 +19,46 @@ template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 void solve() {
   string s; cin >> s;
   int n = s.size();
-  string ans;
-  int l = 0, r = 0;
-  vector<int> removed(n, 0);
-  while(l < n) {
-    while(l == n-1 || (l < n && s[l] != s[l+1])) {
-      ans += s[l];
-      l++;
+  vector<pair<int, string>> ans(n);
+  string tmp;
+  vector<int> pos;
+  vector<char> prev;
+  prev.push_back(char('a'-1));
+  auto answer = [&]() {
+    int sz = tmp.size();
+    string a;
+    if(sz > 10) {
+      rep(i, 5) a += tmp[sz-1-i];
+      a += "...";
+      rrep(i, 2) a += tmp[i];
+    } else {
+      rrep(i, sz) a += tmp[i];
     }
-    r = l;
-    while(r < n && s[r] == s[l]) r++;
-    if(r < n && s[l] < s[r]) {
-      ans += string(r-l, s[l]);
-      l = r;
+    return make_pair(sz, a);
+  };
+  auto can_remove = [&]() {
+    assert(tmp.back() == prev.back());
+    return *(++prev.rbegin()) < prev.back();
+  };
+  rrep(i, n) {
+    tmp += s[i];
+    pos.push_back(i);
+    if(prev.back() != s[i]) prev.push_back(s[i]);
+    int sz = tmp.size();
+    if(sz < 2) {
+      ans[i] = answer();
       continue;
     }
-    if((r-l)%2) {
-      int tmp = 1;
-      for(int i=l+1; i<r; i++) {
-        removed[i] = tmp;
-        tmp = 3-tmp;
-      }
-      ans += s[l];
-    } else {
-      int tmp = 1;
-      for(int i=l; i<r; i++) {
-        removed[i] = tmp;
-        tmp = 3-tmp;
-      }
+    if(tmp[sz-1] == tmp[sz-2] && pos[sz-1]+1 == pos[sz-2] && can_remove()) {
+      tmp.pop_back();
+      tmp.pop_back();
+      pos.pop_back();
+      pos.pop_back();
+      if(prev.back() != tmp.back()) prev.pop_back();
     }
-    l = r;
+    ans[i] = answer();
   }
-  // cout << removed << endk;
-  // cout << ans << endk;
-  int begin = 0;
-  int sz = ans.size();
-  rep(i, n) {
-    int tmpsz = (sz-begin) + (removed[i]==2);
-    cout << tmpsz << ' ';
-    if(tmpsz > 10) {
-      if(removed[i]==2) cout << s[i];
-      rep(j, 5-(removed[i]==2)) cout << ans[begin+j];
-      cout << "...";
-      cout << ans[sz-2] << ans[sz-1] << endk;
-    } else {
-      if(removed[i]==2) cout << s[i];
-      REP(j, begin, sz) cout << ans[j];
-      cout << endk;
-    }
-    if(removed[i]==0) begin++;
-    // if(removed[i]!=2) begin++;
-  }
+  rep(i, n) cout << ans[i].first << ' ' << ans[i].second << endk;
 }
 int main() {
   cin.tie(0);

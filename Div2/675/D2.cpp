@@ -49,37 +49,40 @@ void dijkstra(int s, int N, vector<vector<edge>>& G) {
     }
   }
 }
-
 void solve() {
-  int n, m; cin >> n >> m;
-  vector<vector<edge>> G(n);
-  vector<vector<int>> to(n);
+  ll n; int m; cin >> n >> m;
+  ll sx, sy, tx, ty; cin >> sx >> sy >> tx >> ty;
+  vector<tuple<ll, ll, int>> Px(m), Py(m);
   rep(i, m) {
-    int u, v; cin >> u >> v;
-    u--; v--;
-    G[v].push_back({u, 1});
-    to[u].push_back(v);
+    ll x, y; cin >> x >> y;
+    Px[i] = {x, y, i};
+    Py[i] = {x, y, i};
   }
-  int k; cin >> k;
-  vector<int> P(k);
-  rep(i, k) {
-    cin >> P[i];
-    P[i]--;
+  sort(all(Px));
+  sort(all(Py), [&](tuple<ll, ll, int> p1, tuple<ll, ll, int> p2) {
+    return get<1>(p1) < get<1>(p2);
+  });
+  vector<vector<edge>> G(m+2);
+  rep(i, m) {
+    auto [ux, uy, ui] = Px[i];
+    G[m].push_back({ui, min(abs(ux-sx), abs(uy-sy))});
+    G[ui].push_back({m+1, abs(ux-tx)+abs(uy-ty)});
   }
-  int s = P[0], t = P[k-1];
-  dijkstra(t, n, G);
-  vector<set<int>> vst(n);
-  rep(i, n) {
-    for(int ne: to[i]) {
-      if(d[i] == d[ne]+1) vst[i].insert(ne);
-    }
+  G[m].push_back({m+1, abs(sx-tx)+abs(sy-ty)});
+  rep(i, m-1) {
+    auto [ux, uy, ui] = Px[i];
+    auto [vx, vy, vi] = Px[i+1];
+    G[ui].push_back({vi, vx-ux});
+    G[vi].push_back({ui, vx-ux});
   }
-  int mn = 0, mx = 0;
-  rep(i, k-1) {
-    if(!vst[P[i]].count(P[i+1]) || vst[P[i]].size() > 1) mx++;
-    if(!vst[P[i]].count(P[i+1])) mn++;
+  rep(i, m-1) {
+    auto [ux, uy, ui] = Py[i];
+    auto [vx, vy, vi] = Py[i+1];
+    G[ui].push_back({vi, vy-uy});
+    G[vi].push_back({ui, vy-uy});
   }
-  cout << mn << ' ' << mx << endk;
+  dijkstra(m, m+2, G);
+  cout << d[m+1] << endk;
 }
 int main() {
   cin.tie(0);

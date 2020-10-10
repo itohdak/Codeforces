@@ -18,34 +18,34 @@ template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
   int n; cin >> n;
-  string s; cin >> s;
-  int ans = 0;
-  rrep(i, 26) {
-    if(i) {
-      string ne;
-      char c = 'a'+i;
-      rep(j, s.size()) {
-        if(s[j] == c && !ne.empty() && ne.back() == c-1) {
-          ans++;
-        } else if(s[j] == c-1) {
-          while(!ne.empty() && ne.back() == c) {
-            ne.pop_back();
-            ans++;
-          }
-          ne += c-1;
-        } else {
-          ne += s[j];
-        }
-      }
-      s = ne;
-    }
+  vector<vector<int>> v(1001);
+  rep(i, n) {
+    int x, y; cin >> x >> y;
+    v[x].push_back(y);
   }
+  rep(i, 1001) sort(all(v[i]));
+  string ans;
+  int tmpy = 0;
+  int prevx = 0;
+  rep(i, 1001) {
+    if(v[i].size() == 0) continue;
+    if(v[i].front() < tmpy) {
+      cout << "NO" << endk;
+      return;
+    }
+    ans += string(i-prevx, 'R');
+    ans += string(v[i].back()-tmpy, 'U');
+    tmpy = v[i].back();
+    prevx = i;
+  }
+  cout << "YES" << endk;
   cout << ans << endk;
 }
 int main() {
   cin.tie(0);
   ios::sync_with_stdio(false);
-  int T = 1;
+  int T;
+  cin >> T;
   while(T--) solve();
   return 0;
 }

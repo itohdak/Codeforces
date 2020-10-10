@@ -17,30 +17,41 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n; cin >> n;
-  string s; cin >> s;
-  int ans = 0;
-  rrep(i, 26) {
-    if(i) {
-      string ne;
-      char c = 'a'+i;
-      rep(j, s.size()) {
-        if(s[j] == c && !ne.empty() && ne.back() == c-1) {
-          ans++;
-        } else if(s[j] == c-1) {
-          while(!ne.empty() && ne.back() == c) {
-            ne.pop_back();
-            ans++;
-          }
-          ne += c-1;
-        } else {
-          ne += s[j];
-        }
-      }
-      s = ne;
+  auto query = [&](string s) {
+    cout << s << endl;
+    int res; cin >> res;
+    if(res == 0) exit(0);
+    else return res;
+  };
+  int res;
+  int na, nb, n;
+  res = query(string(300, 'a'));
+  na = 300-res;
+  res = query(string(300, 'b'));
+  nb = 300-res;
+  n = na+nb;
+  string ans(n, 'a');
+  int prev = nb;
+  int cntA = 0, cntB = 0;
+  rep(i, n-1) {
+    ans[i] = 'b';
+    res = query(ans);
+    if(res != prev-1) {
+      ans[i] = 'a';
+      cntA++;
+    } else {
+      prev = res;
+      cntB++;
     }
   }
-  cout << ans << endk;
+  if(cntA == na) {
+    ans[n-1] = 'b';
+    cntB++;
+  } else {
+    cntA++;
+  }
+  assert(cntA == na && cntB == nb);
+  res = query(ans);
 }
 int main() {
   cin.tie(0);

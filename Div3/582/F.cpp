@@ -17,30 +17,43 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n; cin >> n;
-  string s; cin >> s;
-  int ans = 0;
-  rrep(i, 26) {
-    if(i) {
-      string ne;
-      char c = 'a'+i;
-      rep(j, s.size()) {
-        if(s[j] == c && !ne.empty() && ne.back() == c-1) {
-          ans++;
-        } else if(s[j] == c-1) {
-          while(!ne.empty() && ne.back() == c) {
-            ne.pop_back();
-            ans++;
-          }
-          ne += c-1;
-        } else {
-          ne += s[j];
-        }
-      }
-      s = ne;
+  int n, k; cin >> n >> k;
+  vector<int> P(n);
+  rep(i, n) {
+    cin >> P[i];
+    P[i]--;
+  }
+  vector<int> Q(n);
+  rep(i, n) {
+    cin >> Q[i];
+    Q[i]--;
+  }
+  vector<set<int>> vst;
+  int last = -1;
+  vst.push_back(set<int>());
+  rep(i, n) {
+    vst.back().insert(P[i]);
+    vst.back().insert(Q[i]);
+    if((int)vst.back().size() == i-last) {
+      vst.push_back(set<int>());
+      last = i;
     }
   }
-  cout << ans << endk;
+  vst.pop_back();
+  if((int)vst.size() < k) {
+    cout << "NO" << endk;
+  } else {
+    cout << "YES" << endk;
+    string ans(n, ' ');
+    char c = 'a';
+    for(auto st: vst) {
+      for(int i: st) {
+        ans[i] = c;
+      }
+      if(c < 'z') c++;
+    }
+    cout << ans << endk;
+  }
 }
 int main() {
   cin.tie(0);

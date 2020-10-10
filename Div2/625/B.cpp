@@ -17,12 +17,20 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
+  int n; cin >> n;
+  vector<ll> B(n); rep(i, n) cin >> B[i];
+  map<int, ll> mp;
+  rep(i, n) mp[B[i]-i] += B[i];
+  ll ans = 0;
+  for(auto ele: mp) {
+    chmax(ans, ele.second);
+  }
+  cout << ans << endk;
 }
 int main() {
   cin.tie(0);
   ios::sync_with_stdio(false);
-  int T;
-  cin >> T;
+  int T = 1;
   while(T--) solve();
   return 0;
 }

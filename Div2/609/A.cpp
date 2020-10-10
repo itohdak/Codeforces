@@ -16,31 +16,31 @@ const ld eps = 1e-10;
 template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
+bool is_prime(const unsigned n) {
+  switch(n) {
+  case 0:
+  case 1: return false;
+  case 2:
+  case 3: return true;
+  }
+  if(n % 2 == 0) return false;
+  if(n % 3 == 0) return false;
+  if(n % 6 != 1 && n % 6 != 5) return false;
+  for(unsigned i=5; i*i<=n; i+=6) {
+    if(n % i     == 0) return false;
+    if(n % (i+2) == 0) return false;
+  }
+  return true;
+}
+
 void solve() {
   int n; cin >> n;
-  string s; cin >> s;
-  int ans = 0;
-  rrep(i, 26) {
-    if(i) {
-      string ne;
-      char c = 'a'+i;
-      rep(j, s.size()) {
-        if(s[j] == c && !ne.empty() && ne.back() == c-1) {
-          ans++;
-        } else if(s[j] == c-1) {
-          while(!ne.empty() && ne.back() == c) {
-            ne.pop_back();
-            ans++;
-          }
-          ne += c-1;
-        } else {
-          ne += s[j];
-        }
-      }
-      s = ne;
-    }
+  REP(b, 2, 1000000) {
+    if(is_prime(b)) continue;
+    if(is_prime(n+b)) continue;
+    cout << n+b << ' ' << b << endk;
+    return;
   }
-  cout << ans << endk;
 }
 int main() {
   cin.tie(0);

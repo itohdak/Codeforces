@@ -17,30 +17,33 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n; cin >> n;
-  string s; cin >> s;
-  int ans = 0;
-  rrep(i, 26) {
-    if(i) {
-      string ne;
-      char c = 'a'+i;
-      rep(j, s.size()) {
-        if(s[j] == c && !ne.empty() && ne.back() == c-1) {
-          ans++;
-        } else if(s[j] == c-1) {
-          while(!ne.empty() && ne.back() == c) {
-            ne.pop_back();
-            ans++;
-          }
-          ne += c-1;
-        } else {
-          ne += s[j];
-        }
-      }
-      s = ne;
+  int n, r; cin >> n >> r;
+  vector<int> A(n), B(n); rep(i, n) cin >> A[i] >> B[i];
+  vector<int> pos, neg;
+  rep(i, n) (B[i] >= 0 ? pos : neg).push_back(i);
+  sort(all(pos), [&](int i, int j) {
+    if(A[i] == A[j]) return B[i] > B[j];
+    else return A[i] < A[j];
+  });
+  sort(all(neg), [&](int i, int j) {
+    if(A[i]+B[i] == A[j]+B[j]) return A[i] < A[j];
+    else return A[i]+B[i] > A[j]+B[j];
+  });
+  for(int i: pos) {
+    if(r < A[i] || r+B[i] < 0) {
+      cout << "NO" << endk;
+      return;
     }
+    r += B[i];
   }
-  cout << ans << endk;
+  for(int i: neg) {
+    if(r < A[i] || r+B[i] < 0) {
+      cout << "NO" << endk;
+      return;
+    }
+    r += B[i];
+  }
+  cout << "YES" << endk;
 }
 int main() {
   cin.tie(0);

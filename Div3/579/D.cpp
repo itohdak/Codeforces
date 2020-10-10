@@ -17,30 +17,28 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n; cin >> n;
-  string s; cin >> s;
-  int ans = 0;
-  rrep(i, 26) {
-    if(i) {
-      string ne;
-      char c = 'a'+i;
-      rep(j, s.size()) {
-        if(s[j] == c && !ne.empty() && ne.back() == c-1) {
-          ans++;
-        } else if(s[j] == c-1) {
-          while(!ne.empty() && ne.back() == c) {
-            ne.pop_back();
-            ans++;
-          }
-          ne += c-1;
-        } else {
-          ne += s[j];
-        }
-      }
-      s = ne;
-    }
+  string s, t; cin >> s >> t;
+  vector<vector<int>> cnt(26);
+  int n = s.size();
+  rep(i, n) {
+    cnt[s[i]-'a'].push_back(i);
   }
-  cout << ans << endk;
+  int m = t.size();
+  vector<int> mapping(m+2);
+  mapping[0] = -1;
+  mapping[m+1] = n;
+  rep(i, m) {
+    mapping[i+1] = *lower_bound(all(cnt[t[i]-'a']), mapping[i]+1);
+  }
+  int mx = 0;
+  rep(i, m+1) {
+    chmax(mx, mapping[i+1]-mapping[i]);
+  }
+  rrep(i, m) {
+    mapping[i+1] = *(--upper_bound(all(cnt[t[i]-'a']), mapping[i+2]-1));
+    chmax(mx, mapping[i+1]-mapping[i]);
+  }
+  cout << mx-1 << endk;
 }
 int main() {
   cin.tie(0);

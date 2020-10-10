@@ -25,42 +25,33 @@ void solve() {
     G[u].push_back(v);
     G[v].push_back(u);
   }
-  auto calc = [&](int s) {
-    vector<int> nChild(n);
-    vector<int> parent(n);
-    auto dfs = [&](auto dfs, int cur, int par) -> int {
-      parent[cur] = par;
-      for(int ne: G[cur]) {
-        if(ne != par) nChild[cur] += dfs(dfs, ne, cur);
-      }
-      return nChild[cur]+1;
-    };
-    dfs(dfs, s, -1);
-    ll mx = 0;
-    rep(t, n) {
-      vector<int> child(n, -1);
-      int cur = t;
-      while(parent[cur] != -1) {
-        child[parent[cur]] = cur;
-        cur = parent[cur];
-      }
-      ll ret = 0;
-      int depth = 0;
-      auto dfs2 = [&](auto dfs2, int cur) -> void {
-        if(cur == t) return;
-        ret += (nChild[cur]-nChild[child[cur]]) * (depth+1);
-        depth++;
-        dfs2(dfs2, child[cur]);
-      };
-      dfs2(dfs2, s);
-      cout << s << ' ' << t << ' ' << ret << endk;
-      chmax(mx, ret);
+  vector<vector<int>> parent(n, vector<int>(n)); // 根がiのときのjの親
+  vector<vector<int>> dist(n, vector<int>(n));
+  vector<vector<int>> sub(n, vector<int>(n));
+  int root = 0;
+  auto dfs = [&](auto dfs, int cur, int par) -> int {
+    parent[root][cur] = par;
+    dist[root][cur] = (par==-1 ? 0 : dist[root][par]+1);
+    for(int ne: G[cur]) {
+      if(ne != par) sub[root][cur] += dfs(dfs, ne, cur);
     }
-    return mx;
+    return sub[root][cur] += 1;
   };
-  ll ans = 0;
-  rep(i, n) chmax(ans, calc(i));
-  cout << ans << endk;
+  rep(i, n) dfs(dfs, root=i, -1);
+  vector<vector<ll>> dp(n, vector<ll>(n));
+  vector<vector<pair<int, int>>> d(n);
+  rep(i, n) rep(j, n) if(i!=j) d[dist[i][j]].push_back({i, j});
+  rep(i, n) {
+    if(i) {
+      for(auto [u, v]: d[i]) {
+        chmax(dp[u][v],
+              max(dp[u][parent[u][v]], dp[parent[v][u]][v]) + 1LL * sub[v][u] * sub[u][v]);
+      }
+    }
+  }
+  ll mx = 0;
+  rep(i, n) rep(j, n) chmax(mx, dp[i][j]);
+  cout << mx << endk;
 }
 int main() {
   cin.tie(0);

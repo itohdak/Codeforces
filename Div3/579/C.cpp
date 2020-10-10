@@ -16,31 +16,25 @@ const ld eps = 1e-10;
 template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
+void find_divisor(ll N, vector<ll>& divisor) {
+  for(int i=1; i<=sqrt(N); i++) {
+    if(N % i == 0)
+      divisor.push_back(i);
+  }
+  int n = divisor.size();
+  for(int i=n-1; i>=0; i--) {
+    if(N != (ll)pow(divisor[i], 2))
+      divisor.push_back(N / divisor[i]);
+  }
+}
 void solve() {
   int n; cin >> n;
-  string s; cin >> s;
-  int ans = 0;
-  rrep(i, 26) {
-    if(i) {
-      string ne;
-      char c = 'a'+i;
-      rep(j, s.size()) {
-        if(s[j] == c && !ne.empty() && ne.back() == c-1) {
-          ans++;
-        } else if(s[j] == c-1) {
-          while(!ne.empty() && ne.back() == c) {
-            ne.pop_back();
-            ans++;
-          }
-          ne += c-1;
-        } else {
-          ne += s[j];
-        }
-      }
-      s = ne;
-    }
-  }
-  cout << ans << endk;
+  vector<ll> A(n); rep(i, n) cin >> A[i];
+  ll gcd = A[0];
+  rep(i, n) gcd = __gcd(gcd, A[i]);
+  vector<ll> div;
+  find_divisor(gcd, div);
+  cout << div.size() << endk;
 }
 int main() {
   cin.tie(0);

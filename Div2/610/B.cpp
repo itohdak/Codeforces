@@ -17,35 +17,32 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n; cin >> n;
-  string s; cin >> s;
+  int n, k; ll p;
+  cin >> n >> p >> k;
+  vector<ll> A(n); rep(i, n) cin >> A[i];
+  sort(all(A));
+  vector<ll> sum(n+1);
+  vector<ll> sum2(k+1);
+  rep(i, n) {
+    sum[i+1] = A[i];
+    if(i+1-k >= 0) sum[i+1] += sum[i+1-k];
+  }
+  rep(i, k) sum2[i+1] = sum2[i] + A[i];
+  auto test = [&](int t) {
+    if(t%k == 0) return sum[t] <= p;
+    else return sum[t] + sum2[(t-1)%k] <= p;
+  };
   int ans = 0;
-  rrep(i, 26) {
-    if(i) {
-      string ne;
-      char c = 'a'+i;
-      rep(j, s.size()) {
-        if(s[j] == c && !ne.empty() && ne.back() == c-1) {
-          ans++;
-        } else if(s[j] == c-1) {
-          while(!ne.empty() && ne.back() == c) {
-            ne.pop_back();
-            ans++;
-          }
-          ne += c-1;
-        } else {
-          ne += s[j];
-        }
-      }
-      s = ne;
-    }
+  rep(i, n+1) {
+    if(test(i)) chmax(ans, i);
   }
   cout << ans << endk;
 }
 int main() {
   cin.tie(0);
   ios::sync_with_stdio(false);
-  int T = 1;
+  int T;
+  cin >> T;
   while(T--) solve();
   return 0;
 }

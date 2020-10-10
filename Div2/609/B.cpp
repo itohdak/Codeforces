@@ -17,30 +17,21 @@ template<typename T1, typename T2> inline void chmin(T1 &a, T2 b){if(a>b) a=b;}
 template<typename T1, typename T2> inline void chmax(T1 &a, T2 b){if(a<b) a=b;}
 
 void solve() {
-  int n; cin >> n;
-  string s; cin >> s;
-  int ans = 0;
-  rrep(i, 26) {
-    if(i) {
-      string ne;
-      char c = 'a'+i;
-      rep(j, s.size()) {
-        if(s[j] == c && !ne.empty() && ne.back() == c-1) {
-          ans++;
-        } else if(s[j] == c-1) {
-          while(!ne.empty() && ne.back() == c) {
-            ne.pop_back();
-            ans++;
-          }
-          ne += c-1;
-        } else {
-          ne += s[j];
-        }
-      }
-      s = ne;
+  int n; ll m; cin >> n >> m;
+  vector<ll> A(n); rep(i, n) cin >> A[i];
+  vector<ll> B(n); rep(i, n) cin >> B[i];
+  sort(all(A));
+  sort(all(B));
+  ll mn = longinf;
+  rep(i, n) {
+    bool ok = true;
+    ll diff = ((B[i]-A[0])%m+m)%m;
+    rep(j, n) {
+      if(((B[(i+j)%n]-A[j])%m+m)%m != diff) ok = false;
     }
+    if(ok) chmin(mn, diff);
   }
-  cout << ans << endk;
+  cout << mn << endk;
 }
 int main() {
   cin.tie(0);
